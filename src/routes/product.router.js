@@ -23,6 +23,6 @@ router.post('/', userService.logInAuthentication(['admin']), productsController.
 
 router.put('/:pid', userService.logInAuthentication(['admin']), productsController.updateProduct);
 
-router.delete('/:pid', userService.logInAuthentication(['admin']), productsController.productDelete);
+router.delete('/:pid', userService.logInAuthentication(['admin']), productsController.premiunAlertDelete ,productsController.productDelete);
 
 export default router

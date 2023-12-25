@@ -36,6 +36,9 @@ const productsSchema = new mongoose.Schema({
     quantity:{
         type: 'number',
         require: true
+    },
+    owner:{
+        type: 'string',
     }
 })
 

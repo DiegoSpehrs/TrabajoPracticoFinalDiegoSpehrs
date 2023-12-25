@@ -1,5 +1,6 @@
 import {productsService} from '../../services/products/products.service.js';
 import { logger } from '../../winston.js';
+import { transport } from '../../nodmailer.js';
 
 
 class ProductsController {
@@ -41,7 +42,7 @@ class ProductsController {
           res.status(400).json({message:error.message});
       }  
     }
-    async productDelete(req, res) {
+    async productDelete(req, res, next) {
         const {pid} = req.params;
         try {
           const result = await productsService.deleteProduct(pid);  
@@ -50,6 +51,25 @@ class ProductsController {
             logger.error({message:error.message});
             res.status(400).json({message:error.message});
         }
+    next();
+    }
+
+    async premiunAlertDelete(req, res, next) {
+      const {pid} = req.params;
+      const prod = await productsService.getProductById(pid);
+      if (!prod.owner){
+        next();
+      }else{
+        const messageOptions = {
+          from: 'ecommerce alert',
+          to: prod.owner,
+          subject: 'your product has been deleted',
+          text: `hi, your product published is deleted ${prod.name}`
+        };
+        await transport.sendMail(messageOptions);
+        res.send('mail sent successfully');
+      }
+      next();
     }
 
     
