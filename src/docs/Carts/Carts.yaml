@@ -1,0 +1,142 @@
+paths:
+  /api/cart:
+    post:
+      sumary: crea un nuevo carrito
+      tags: 
+        - Carts
+      responses:
+        "200": 
+          description: Envia un mensaje de Cart created successfully y el carrito creado como objeto
+        "400":
+          description: Envia un mensaje de Some required data is missing 
+  /api/cart/:cid:                
+    put:
+      sumary: Devuelve el carrito creado en la base de datos que corresponda al id provisto por params
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          schema:
+            $type: string        
+      responses:
+        "200":
+          description: Devuelve un mensaje de This is your cart y el objeto del carrito encontrado
+        "400":
+          description: Devuelve un mensaje de Cart not found    
+    delete:
+      sumary: elimina un carrito ya existente en la base de datos
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          schema:
+            type: string  
+      responses:
+        "200":
+          description: Envia un mensaje de Your cart has been deleted
+        "400":
+          description: Envia un mensaje de Cart not found
+  /api/cart/:cid/products/:pid:
+    post:
+      sumary: Agrega un producto a un carrito ya existente en la base, esta ruta solo es accesible para los usuarios con rol user
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          schema:
+            type: string 
+        - name: pid
+          in: path
+          description: id del producto a agregar
+          required: true
+          schema:
+            type: string 
+      responses:
+        "200":
+          description: Envia un mensaje de Product added successfully y el objeto del producto que se agrego
+        "400":
+          description: Envia un mensaje de Cart not found 
+    delete:
+      sumary: Borra un producto ya guardado en el array dentro de un carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: id del producto a agregar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Envia un mensaje de Porduct deleted successfully
+        "400":
+          description: Envia un mensaje de Cart not found              
+    put:
+      sumary: actualiza alguna propiedad del producto dentro del carrito
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: id del producto a agregar
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Envia un mensaje de Your product has benn updated y el objeto actualizado
+        "400":
+          description: Envia un mensaje de Cart not found
+  /api/cart/:cid/pucharse:
+    get:
+      sumary: Finaliza la compra del carrito haciendola efectiva, crea un ticket en la coleccion correspondiente dentro del la base de datos
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          schema:
+            type: string                                             
+components:
+  schemas:
+    carts:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: id del carrito autogenerado por la base de datos
+        pucharse:
+          type: string
+          description: dueño del carrito
+        products:
+          type: array
+          description: array que contiene los productos del carrito  
+      example:
+        _id: ObjectId('64f7a435410f1c3d36e6bd5a')
+        pucharse: pepeFernandez@test.com
+        products: []
+  

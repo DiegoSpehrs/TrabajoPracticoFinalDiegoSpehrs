@@ -1,0 +1,160 @@
+paths:
+  /api/products:
+    get:
+      sumary: Trea todos los productos de la base de datos
+      tags: 
+        - Products
+      responses:
+        "200": 
+          description: Muestra todos los productos traidos de la base de datos configurado con un paginate
+        "500":
+          description: Error interno
+    post:
+      sumary: Agrega un nuevo producto a la base de datos, Esta ruta solo tienen accesso los usuarios con role admin
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/products"
+      responses:  
+        "200": 
+          description: Devuelve un mensaje de New product created y muestra el nuevo producto creado
+        "400":
+          description: Devuelve un mensaje de some required data is missing  
+  /api/products/:pid:
+    get:
+      sumary: Ubica un producto especifico en la base de datos filtrando por id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: id del producto
+          required: true
+          schema:
+            type: string  
+      responses:
+        "200": 
+          description: Devuelve un mensaje de this product is y el objeto del producto encontrado
+        "400":
+          description: Devuelve un mensaje de Product not found                 
+    put:
+      sumary: Modifica un producto ya existente en la base de datos, a esta ruta solo tienen acceso los usuarios con el rol de admin
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: id del producto
+          required: true
+          schema:
+            $type: string 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/products"       
+      responses:
+        "200":
+          description: Este status devuelve un mensaje de Product updated successfully con un objeto del producto modificado
+        "400":
+          description: Este status devuelve un mensaje de Product not found    
+    delete:
+      sumary: Elimina un producto ya existente en la base de datos, a esta ruta solo tienen acceso los usuarios con el rol de admin
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: id del producto
+          required: true
+          schema:
+            type: string  
+      responses:
+        "200":
+          description: Este estatus devuelve un mensaje de Product deleted successfully
+        "400":
+          description: Este status devuelve un mensaje de  Product not found 
+components:
+  schemas:
+    products:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: id del producto autogenerado por la base de datos
+        title:
+          type: string
+          description: titulo del producto
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: precio del producto
+        thumbnail:
+          type: string
+          description: url correspondiente a la imagen de producto
+        category:
+          type: string
+          description: categoria a la que pertenece el producto
+        code:
+          type: string
+          description: codigo del producto
+        stock:
+          type: number
+          description: stock disponible del producto
+        quantity:
+          type: number
+          description: cantidad del producto guardado en el carrito
+      example:
+        _id: ObjectId('64f7a435410f1c3d36e6bd5a')
+        title: Iphone
+        description: Esto es una prueba
+        price: 450
+        thumbnail: Esto es una prueba
+        category: celular
+        code: abc123
+        stock: 17
+        quantity: 0
+  requestBody:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: titulo del producto
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: precio del producto
+        thumbnail:
+          type: string
+          description: url de la imagen del producto
+        category:
+          type: string
+          description: categoria del producto
+        code:
+          type: string
+          description: codigo del producto
+        stock:
+          type: number
+          description: stock disponible del producto
+        quantity:
+          type: number
+          description: cantidad del producto guardado en el carrito                                         
+      example:
+        title: iphone
+        description: esto es una prueba
+        price: 450
+        thumbnail: esto es una prueba
+        category: celular
+        code: abc123
+        stock: 10
+        quantity: 0
